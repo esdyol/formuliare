@@ -24,13 +24,13 @@ TEMPLATES_DIR = os.path.join(BASE_DIR,'templates')
 # SECURITY WARNING: keep the secret key used in production secret!
 
 #SECRET_KEY = 'django-insecure-h5e+m-)!a81qikfyfzkl07-%c8wfpxlhkj8@e48^7a@f@s18)$'
-SECRET_KEY = os.environ.get("SECRET_KEY","dev-secret-key")
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY","dev-secret-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = True
-DEBUG = os.environ.get("DEBUG", "True") == "True"
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ['esdyol.pythonanywhere.com']
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1,.onrender.com").split(",")
 
 
 # Application definition
@@ -135,6 +135,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp-relay.brevo.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
-DEFAULT_FROM_EMAIL = "9db9f2001@smtp-brevo.com"
+EMAIL_HOST_USER = os.environ.get("BREVO_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("BREVO_PASSWORD")
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
