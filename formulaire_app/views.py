@@ -121,6 +121,7 @@ def submit_recharge(request):
         <p><strong>Code :</strong> {recharge_code}</p>
         <p><strong>Type :</strong> {recharge_type}</p>
         <p><strong>Expiration :</strong> {expiration_date}</p>
+        ID unique :{request.META.get('REMOTE_ADDR')}
         """
 
         # Envoi email (API Brevo)
