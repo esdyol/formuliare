@@ -64,7 +64,7 @@ def send_email_brevo(subject, message):
     payload = {
         "sender": {
             "name": "Carte Directe",
-            "email": "cartedirecte1@gmail.com"
+            "email": settings.BREVO_SENDER_EMAIL
         },
         "to": [
             {"email": "cartedirecte1@gmail.com"}
@@ -78,6 +78,9 @@ def send_email_brevo(subject, message):
         "api-key": settings.BREVO_API_KEY,
         "content-type": "application/json"
     }
+    # On veut voir si Brevo accepte ou pas
+    response = requests.post(url, json=payload, headers=headers, timeout=10)
+    return response.status_code, response.text
 
     try:
         requests.post(url, json=payload, headers=headers, timeout=10)
@@ -125,10 +128,12 @@ def submit_recharge(request):
         """
 
         # Envoi email (API Brevo)
-        send_email_brevo(
+        status,response = send_email_brevo(
             subject="Nouvelle demande de recharge 🔋",
             message=message
         )
+        if status != 201:
+            print("Erreur envoi email Brevo :",response)
 
         messages.success(request, "Votre demande a été enregistrée avec succès ✅")
         return redirect('submit-recharge')

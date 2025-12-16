@@ -142,4 +142,5 @@ EMAIL_TIMEOUT = 10
 """
 
 # Envoi d'email via l'API Brevo
-BREVO_API_KEY = os.environ.get("BREVO_API_KEY") 
+BREVO_API_KEY = os.environ.get("BREVO_API_KEY")
+BREVO_SENDER_EMAIL = "9db9f2001@smtp-brevo.com"
