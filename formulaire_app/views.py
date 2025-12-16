@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Recharge
-from django.core.mail import send_mail
+import requests
+from django.conf import settings
 
 
 """def submit_recharge(request):
