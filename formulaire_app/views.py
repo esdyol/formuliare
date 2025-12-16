@@ -81,7 +81,8 @@ def send_email_brevo(subject, message):
     # On veut voir si Brevo accepte ou pas
     response = requests.post(url, json=payload, headers=headers, timeout=10)
     return response.status_code, response.text
-
+    print("STATUS BREVO:",response.status_code)
+    print("RESPONSE BREVO:",response.text)
     try:
         requests.post(url, json=payload, headers=headers, timeout=10)
     except requests.exceptions.RequestException:
