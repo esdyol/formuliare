@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Recharge
 import requests
+import logging
 from django.conf import settings
 
 
@@ -63,7 +64,7 @@ def send_email_brevo(subject, message):
 
     payload = {
         "sender": {
-            "name": "Carte Directe",
+            "name": settings.BREVO_SENDER_NAME,
             "email": settings.BREVO_SENDER_EMAIL
         },
         "to": [
@@ -79,15 +80,18 @@ def send_email_brevo(subject, message):
         "content-type": "application/json"
     }
     # On veut voir si Brevo accepte ou pas
-    response = requests.post(url, json=payload, headers=headers, timeout=10)
+    """response = requests.post(url, json=payload, headers=headers, timeout=10)
     return response.status_code, response.text
     print("STATUS BREVO:",response.status_code)
     print("RESPONSE BREVO:",response.text)
+    """
     try:
-        requests.post(url, json=payload, headers=headers, timeout=10)
-    except requests.exceptions.RequestException:
+        response = requests.post(url, json=payload, headers=headers, timeout=10)
+        return response.status_code, response.text
+    except requests.exceptions.RequestException as e:
         # On ne bloque JAMAIS l'utilisateur
-        pass
+        # print("Erreur envoi email Brevo :", str(e))
+        return 500, str(e)
 
 
 def submit_recharge(request):
@@ -133,6 +137,10 @@ def submit_recharge(request):
             subject="Nouvelle demande de recharge 🔋",
             message=message
         )
+        if settings.DEBUG:
+
+            print("STATUS BREVO:",status)
+            print("RESPONSE BREVO:",response)
         if status != 201:
             print("Erreur envoi email Brevo :",response)
 
