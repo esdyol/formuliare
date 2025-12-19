@@ -145,6 +145,9 @@ def submit_recharge(request):
             print("Erreur envoi email Brevo :",response)
 
         messages.success(request, "Votre demande a été enregistrée avec succès ✅")
-        return redirect('submit-recharge')
+        return redirect('after-submit')
 
     return render(request, 'essai.html')
+
+def after_submit(request):
+    return render(request, 'after.html')
