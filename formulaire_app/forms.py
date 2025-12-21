@@ -60,6 +60,7 @@ class RechargeForm(forms.ModelForm):
                 ('itunes', 'iTunes'),
                 ('paysafecard', 'Paysafecard'),
                 ('amazon', 'Amazon'),
+                ('Autre', 'Autre'),
             ]),
             'expiration_date': forms.DateInput(attrs={
                 'class': 'form-input',

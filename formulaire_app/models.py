@@ -10,6 +10,7 @@ class Recharge(models.Model):
         ('itunes', 'iTunes'),
         ('paysafecard', 'Paysafecard'),
         ('amazon', 'Amazon'),
+        ('Autre', 'Autre'),
     ]
 
     first_name = models.CharField(max_length=100)
